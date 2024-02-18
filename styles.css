@@ -1,7 +1,43 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+* {
+    box-sizing: border-box;
+}
+/* Переменные для светлой темы */
+:root.light-theme {
+    --background-color: #f0f0f0;
+    --text-color: #333;
+    --navbar-background: #fff;
+    --card-background: #fff;
+}
+
+/* Переменные для темной темы */
+:root.dark-theme {
+    --background-color: #333;
+    --text-color: #f0f0f0;
+    --navbar-background: #222;
+    --card-background: #444;
+}
+
+/* Общие стили для всех тем */
+.page {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.main__inputs-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.button {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
 }
 
 .container {
@@ -23,11 +59,25 @@ body {
 
 /* Стили для графика */
 #activityChart {
-    width: 50%;
-    height: 20vh; /* Задайте высоту графика по своему усмотрению */
+    margin: auto;
+    /* Задайте высоту графика по своему усмотрению */
 }
 
 .activity__chart {
-    width: 50%;
-    height: 20vh;
+    /* display: none; */
+    width: 300px;
+    height: 300px;
+    margin-bottom: 50px;
 }
+
+.main__total-hours, .main__daily-hours {
+   display: flex;
+   flex-direction: column; 
+   align-items: center;
+}
+
+.main__hours-count {
+    display: flex;
+    gap: 25px;
+}
+

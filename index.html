@@ -1,37 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-theme">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding Activity Tracker</title>
+    <link href="styles.css" rel="stylesheet" />
+    <link rel="icon" href="favicon.ico" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./src/script.js" defer></script>
+    <script src="./src/visual.js" defer></script>
 </head>
-<body>
-    <h1>Coding Activity Tracker</h1>
-    <div>
-        <label for="language">Language:</label>
-        <input type="text" id="language">
+
+<body class="page">
+    <h1 class="main__title">Coding Activity Tracker</h1>
+    <div class="main__inputs-buttons">
+        <button class="button" onclick="toggleTheme()">Theme</button>
+        <div>
+            <label for="language">Language:</label>
+            <input type="text" id="language">
+        </div>
+        <div>
+            <label for="hours">Hours:</label>
+            <input type="number" id="hours" min="0" value="0">
+        </div>
+        <button class="button" onclick="addActivity()">Add Activity</button>
     </div>
-    <div>
-        <label for="hours">Hours:</label>
-        <input type="number" id="hours" min="0" value="0">
-    </div>
-    <button onclick="addActivity()">Add Activity</button>
     <div class="activity__chart">
         <canvas id="activityChart" width="400" height="300"></canvas>
     </div>
-    <div>
-        <h2>Total Hours:</h2>
-        <p id="totalHours">0</p>
-    </div>
-    <div>
-        <h2>Daily Hours:</h2>
-        <p id="dailyHours">0</p>
-    </div>
-    <div id="languageTime">
-        <!-- Здесь будут отображаться время для каждого языка программирования -->
-    </div>
-    <button id="resetButton">Обнулить прогресс</button>    
-    <script src="script.js"></script>
+    <section class="main__hours-count">
+        <div class="main__total-hours">
+            <h2>Total Hours</h2>
+            <p id="totalHours">0</p>
+        </div>
+        <div class="main__daily-hours">
+            <h2>Daily Hours</h2>
+            <p id="dailyHours">0</p>
+        </div>
+    </section>
+        <div id="languageTime">
+            <!-- Здесь будут отображаться время для каждого языка программирования -->
+        </div>
+
+    <button class="button" id="resetButton" onclick="resetProgress()">Reset</button>
 </body>
+
 </html>

@@ -9,17 +9,16 @@ let dailyHours = 0;
 // Переменная для хранения объекта Chart
 let chart;
 
-// Проверяем, есть ли сохраненные данные в локальном хранилище
+// Проверяем, есть ли сохраненные данные в локальном хранилище и загружаем их
 if (localStorage.getItem('activityData')) {
-    // Если данные есть, загружаем их и обновляем переменные
     activityData = JSON.parse(localStorage.getItem('activityData'));
     totalHours = parseInt(localStorage.getItem('totalHours')) || 0;
     dailyHours = parseInt(localStorage.getItem('dailyHours')) || 0;
-    allLanguages = new Set(Object.keys(activityData).reduce((acc, date) => {
-        return acc.concat(Object.keys(activityData[date]));
-    }, []));
-}
 
+    // Загружаем сохраненные языки из localStorage
+    const savedLanguages = JSON.parse(localStorage.getItem('allLanguages'));
+    allLanguages = new Set(savedLanguages);
+}
 // Вызываем функции для обновления графика и счетчиков
 updateChart();
 updateTotalCounter();
@@ -31,34 +30,37 @@ updateLanguageTime();
 function addActivity() {
     const language = document.getElementById('language').value;
     let hours = parseInt(document.getElementById('hours').value);
-    const today = new Date().toLocaleDateString(); // Получаем текущую дату в формате "дд.мм.гггг"
+    const today = new Date().toLocaleDateString();
 
-    // Проверяем, что количество часов находится в допустимом диапазоне от 0 до 24
     if (!isNaN(hours) && hours >= 0) {
-        // Проверяем, не превышает ли суммарное количество часов за текущий день 24
         if (dailyHours + hours <= 24) {
             if (!activityData[today]) {
-                activityData[today] = {}; // Создаем объект для данной даты, если его еще нет
+                activityData[today] = {};
             }
             if (!activityData[today][language]) {
-                activityData[today][language] = 0; // Инициализируем активность по данному языку программирования, если ее еще нет
+                activityData[today][language] = 0;
             }
-            activityData[today][language] += hours; // Добавляем активность
-            totalHours += hours; // Увеличиваем общее количество часов за все время
-            dailyHours += hours; // Увеличиваем общее количество часов за текущий день
-            allLanguages.add(language); // Добавляем язык программирования в множество всех языков
-            if (chart) {
-                chart.destroy(); // Уничтожаем существующий график перед созданием нового
-            }
+            activityData[today][language] += hours;
+            totalHours += hours;
+            dailyHours += hours;
+            allLanguages.add(language);
+
+            // Сохраняем обновленные данные в локальное хранилище
+            localStorage.setItem('activityData', JSON.stringify(activityData));
+            localStorage.setItem('totalHours', totalHours);
+            localStorage.setItem('dailyHours', dailyHours);
+            localStorage.setItem('allLanguages', JSON.stringify(Array.from(allLanguages)));
+
+            // Обновляем график и счетчики
             updateChart();
             updateTotalCounter();
             updateDailyCounter();
-            updateLanguageTime(); // Обновляем время для каждого языка программирования
+            updateLanguageTime();
         } else {
-            alert("Не пизди!"); // Выводим сообщение об ошибке, если превышено максимальное количество часов за день (24)
+            alert("Ой, не пизди, кодер хуев, у тебя в сутках сколько часов?");
         }
     } else {
-        alert("Неверное количество часов! Введи число не меньше 0.");
+        alert("Неверное количество часов! Введите число не меньше 0.");
     }
 }
 
@@ -86,15 +88,14 @@ function updateDailyCounter() {
 }
 
 // Функция для обновления графика
-// Функция для обновления графика
 function updateChart() {
     const dates = Object.keys(activityData);
     const languages = Array.from(allLanguages); // Преобразуем множество всех языков в массив
     const ctx = document.getElementById('activityChart').getContext('2d');
 
-    // Добавляем проверку на существование графика
+    // Уничтожаем существующий график, если он есть
     if (chart) {
-        chart.destroy(); // Уничтожаем существующий график перед созданием нового
+        chart.destroy();
     }
 
     const datasets = [];
@@ -124,18 +125,22 @@ function updateChart() {
     });
 }
 
-
 // Функция для сброса прогресса
 function resetProgress() {
-    activityData = {}; // Сбрасываем данные активности
-    allLanguages.clear(); // Очищаем множество языков
-    totalHours = 0; // Обнуляем общее количество часов
-    dailyHours = 0; // Обнуляем количество часов за текущий день
-    updateChart(); // Обновляем график
-    updateTotalCounter(); // Обновляем общее количество часов
-    updateDailyCounter(); // Обновляем количество часов за текущий день
-    updateLanguageTime(); // Обновляем время для каждого языка программирования
-}
+    // Очищаем данные в JavaScript переменных
+    activityData = {};
+    allLanguages.clear();
+    totalHours = 0;
+    dailyHours = 0;
+    // Обновляем отображение данных на странице
+    updateChart();
+    updateTotalCounter();
+    updateDailyCounter();
+    updateLanguageTime();
 
-// Обработчик события для кнопки "Обнулить прогресс"
-document.getElementById('resetButton').addEventListener('click', resetProgress);
+    // Очищаем данные в localStorage
+    localStorage.removeItem('activityData');
+    localStorage.removeItem('allLanguages');
+    localStorage.removeItem('totalHours');
+    localStorage.removeItem('dailyHours');
+}
