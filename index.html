@@ -3,31 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coder Activity Tracker</title>
+    <title>Coding Activity Tracker</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Coder Activity Tracker</h1>
-    <div class="container">
-        <label for="language">Язык программирования:</label>
-        <select id="language">
-            <option value="htmlcss">Вёрстка</option>
-            <option value="javascript">JavaScript</option>
-            <option value="otherstuff">Остальное (GIT и фреймы явы)</option>
-        </select>
-        <label for="hours">Часов:</label>
+    <h1>Coding Activity Tracker</h1>
+    <div>
+        <label for="language">Language:</label>
+        <input type="text" id="language">
+    </div>
+    <div>
+        <label for="hours">Hours:</label>
         <input type="number" id="hours" min="0" value="0">
-        <button onclick="addActivity()">Добавить</button>
     </div>
-    <div class="summary">
-        <p>Общее количество часов за текущий день: <span id="dailyHours">0</span></p>
-        <p>Общее количество часов за все время: <span id="totalHours">0</span></p>
+    <button onclick="addActivity()">Add Activity</button>
+    <div class="activity__chart">
+        <canvas id="activityChart" width="400" height="300"></canvas>
     </div>
-    <div class="chart-container">
-        <canvas id="activityChart"></canvas>
+    <div>
+        <h2>Total Hours:</h2>
+        <p id="totalHours">0</p>
     </div>
-
+    <div>
+        <h2>Daily Hours:</h2>
+        <p id="dailyHours">0</p>
+    </div>
+    <div id="languageTime">
+        <!-- Здесь будут отображаться время для каждого языка программирования -->
+    </div>
+    <button id="resetButton">Обнулить прогресс</button>    
     <script src="script.js"></script>
 </body>
 </html>

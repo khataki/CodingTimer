@@ -1,9 +1,33 @@
-let activityData = {}; // Объект для хранения активности по каждой дате
-let allLanguages = new Set(); // Множество для хранения всех используемых языков программирования
-let totalHours = 0; // Общее количество часов за все время
-let dailyHours = 0; // Общее количество часов за текущий день
-let chart; // Переменная для хранения объекта Chart
+// Объект для хранения активности по каждой дате
+let activityData = {};
+// Множество для хранения всех используемых языков программирования
+let allLanguages = new Set();
+// Общее количество часов за все время
+let totalHours = 0;
+// Общее количество часов за текущий день
+let dailyHours = 0;
+// Переменная для хранения объекта Chart
+let chart;
 
+// Проверяем, есть ли сохраненные данные в локальном хранилище
+if (localStorage.getItem('activityData')) {
+    // Если данные есть, загружаем их и обновляем переменные
+    activityData = JSON.parse(localStorage.getItem('activityData'));
+    totalHours = parseInt(localStorage.getItem('totalHours')) || 0;
+    dailyHours = parseInt(localStorage.getItem('dailyHours')) || 0;
+    allLanguages = new Set(Object.keys(activityData).reduce((acc, date) => {
+        return acc.concat(Object.keys(activityData[date]));
+    }, []));
+}
+
+// Вызываем функции для обновления графика и счетчиков
+updateChart();
+updateTotalCounter();
+updateDailyCounter();
+updateLanguageTime();
+
+
+// Функция для добавления активности
 function addActivity() {
     const language = document.getElementById('language').value;
     let hours = parseInt(document.getElementById('hours').value);
@@ -29,6 +53,7 @@ function addActivity() {
             updateChart();
             updateTotalCounter();
             updateDailyCounter();
+            updateLanguageTime(); // Обновляем время для каждого языка программирования
         } else {
             alert("Не пизди!"); // Выводим сообщение об ошибке, если превышено максимальное количество часов за день (24)
         }
@@ -37,20 +62,40 @@ function addActivity() {
     }
 }
 
+// Функция для обновления времени для каждого языка программирования
+function updateLanguageTime() {
+    const languageTimeElement = document.getElementById('languageTime');
+    languageTimeElement.innerHTML = ''; // Очищаем содержимое элемента
 
+    for (const language of allLanguages) {
+        const languageHours = activityData[Object.keys(activityData)[0]][language] || 0; // Получаем время для первой даты
+        const languageParagraph = document.createElement('p');
+        languageParagraph.textContent = `Time spent on ${language}: ${languageHours} hours`;
+        languageTimeElement.appendChild(languageParagraph);
+    }
+}
 
+// Функция для обновления общего количества часов
 function updateTotalCounter() {
     document.getElementById('totalHours').innerText = totalHours;
 }
 
+// Функция для обновления количества часов за текущий день
 function updateDailyCounter() {
     document.getElementById('dailyHours').innerText = dailyHours;
 }
 
+// Функция для обновления графика
+// Функция для обновления графика
 function updateChart() {
     const dates = Object.keys(activityData);
     const languages = Array.from(allLanguages); // Преобразуем множество всех языков в массив
     const ctx = document.getElementById('activityChart').getContext('2d');
+
+    // Добавляем проверку на существование графика
+    if (chart) {
+        chart.destroy(); // Уничтожаем существующий график перед созданием нового
+    }
 
     const datasets = [];
 
@@ -60,9 +105,6 @@ function updateChart() {
         datasets.push({
             label: date,
             data: data,
-            // backgroundColor: getRandomColor(),
-            // borderColor: getRandomColor(),
-            // borderWidth: 1
         });
     }
 
@@ -82,21 +124,18 @@ function updateChart() {
     });
 }
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+
+// Функция для сброса прогресса
+function resetProgress() {
+    activityData = {}; // Сбрасываем данные активности
+    allLanguages.clear(); // Очищаем множество языков
+    totalHours = 0; // Обнуляем общее количество часов
+    dailyHours = 0; // Обнуляем количество часов за текущий день
+    updateChart(); // Обновляем график
+    updateTotalCounter(); // Обновляем общее количество часов
+    updateDailyCounter(); // Обновляем количество часов за текущий день
+    updateLanguageTime(); // Обновляем время для каждого языка программирования
 }
 
-// Остальной JavaScript код
-
-function updateTotalCounter() {
-    document.getElementById('totalHours').innerText = totalHours;
-}
-
-function updateDailyCounter() {
-    document.getElementById('dailyHours').innerText = dailyHours;
-}
+// Обработчик события для кнопки "Обнулить прогресс"
+document.getElementById('resetButton').addEventListener('click', resetProgress);
