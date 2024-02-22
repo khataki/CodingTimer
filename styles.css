@@ -1,12 +1,14 @@
 * {
     box-sizing: border-box;
 }
+
 /* Переменные для светлой темы */
 :root.light-theme {
     --background-color: #f0f0f0;
     --text-color: #333;
     --navbar-background: #fff;
     --card-background: #fff;
+    --background-grid-color: #11c9d5
 }
 
 /* Переменные для темной темы */
@@ -15,6 +17,13 @@
     --text-color: #f0f0f0;
     --navbar-background: #222;
     --card-background: #444;
+    --background-grad-color: #b400b8;
+}
+
+:root {
+    --retro-font: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
 }
 
 /* Общие стили для всех тем */
@@ -27,8 +36,6 @@
     align-items: center;
 }
 
-
-
 .main__inputs-buttons {
     display: flex;
     gap: 20px;
@@ -38,6 +45,7 @@
 .button {
     background-color: transparent;
     border: 1px solid var(--border-color);
+    color: var(--text-color);
 }
 
 .container {
@@ -52,7 +60,7 @@
 
 /* Стили для общих лейблов и текста */
 .chart-label {
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #333;
 }
@@ -70,10 +78,11 @@
     margin-bottom: 50px;
 }
 
-.main__total-hours, .main__daily-hours {
-   display: flex;
-   flex-direction: column; 
-   align-items: center;
+.main__total-hours,
+.main__daily-hours {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .main__hours-count {
@@ -81,3 +90,6 @@
     gap: 25px;
 }
 
+.main__title {
+    font-family: var(--retro-font);
+}

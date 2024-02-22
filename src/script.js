@@ -3,66 +3,74 @@ let activityData = {};
 // Множество для хранения всех используемых языков программирования
 let allLanguages = new Set();
 // Общее количество часов за все время
-let totalHours = 0;
+let totalHours = parseFloat(localStorage.getItem('totalHours')) || 0; // Используем parseFloat, чтобы преобразовать строку в число
 // Общее количество часов за текущий день
-let dailyHours = 0;
+let dailyHours = parseFloat(localStorage.getItem('dailyHours')) || 0; // Используем parseFloat, чтобы преобразовать строку в число
 // Переменная для хранения объекта Chart
 let chart;
 
 // Проверяем, есть ли сохраненные данные в локальном хранилище и загружаем их
 if (localStorage.getItem('activityData')) {
     activityData = JSON.parse(localStorage.getItem('activityData'));
-    totalHours = parseInt(localStorage.getItem('totalHours')) || 0;
-    dailyHours = parseInt(localStorage.getItem('dailyHours')) || 0;
+
+    // Проверяем, является ли значение из локального хранилища числом, если нет - устанавливаем значение по умолчанию
+    totalHours = !isNaN(parseFloat(localStorage.getItem('totalHours'))) ? parseFloat(localStorage.getItem('totalHours')) : 0;
+    dailyHours = !isNaN(parseFloat(localStorage.getItem('dailyHours'))) ? parseFloat(localStorage.getItem('dailyHours')) : 0;
 
     // Загружаем сохраненные языки из localStorage
     const savedLanguages = JSON.parse(localStorage.getItem('allLanguages'));
     allLanguages = new Set(savedLanguages);
 }
+
 // Вызываем функции для обновления графика и счетчиков
 updateChart();
 updateTotalCounter();
 updateDailyCounter();
 updateLanguageTime();
 
-
+// Функция для добавления активности
 // Функция для добавления активности
 function addActivity() {
-    const language = document.getElementById('language').value;
-    let hours = parseInt(document.getElementById('hours').value);
-    const today = new Date().toLocaleDateString();
+    let language = document.getElementById('language').value;
+    // Получаем значения часов и минут из полей ввода
+    let hoursInput = parseFloat(document.getElementById('hours').value) || 0; // Предполагаем, что это поле для часов
+    let minutesInput = parseFloat(document.getElementById('minutes').value) || 0; // Предполагаем, что это поле для минут
 
-    if (!isNaN(hours) && hours >= 0) {
-        if (dailyHours + hours <= 24) {
-            if (!activityData[today]) {
-                activityData[today] = {};
-            }
-            if (!activityData[today][language]) {
-                activityData[today][language] = 0;
-            }
-            activityData[today][language] += hours;
-            totalHours += hours;
-            dailyHours += hours;
-            allLanguages.add(language);
+    // Преобразуем минуты в десятичную долю часа и исправляем переменную на totalActivityHours для избежания путаницы
+    let totalActivityHours = hoursInput + (minutesInput / 60);
 
-            // Сохраняем обновленные данные в локальное хранилище
-            localStorage.setItem('activityData', JSON.stringify(activityData));
-            localStorage.setItem('totalHours', totalHours);
-            localStorage.setItem('dailyHours', dailyHours);
-            localStorage.setItem('allLanguages', JSON.stringify(Array.from(allLanguages)));
+    let today = new Date().toLocaleDateString();
 
-            // Обновляем график и счетчики
-            updateChart();
-            updateTotalCounter();
-            updateDailyCounter();
-            updateLanguageTime();
-        } else {
-            alert("Ой, не пизди, кодер хуев, у тебя в сутках сколько часов?");
+    if (!isNaN(totalActivityHours) && totalActivityHours > 0) {
+        if (!activityData[today]) {
+            activityData[today] = {};
         }
+        if (!activityData[today][language]) {
+            activityData[today][language] = 0;
+        }
+
+        // Исправляем использование переменной на totalActivityHours
+        activityData[today][language] += totalActivityHours;
+        totalHours += totalActivityHours;
+        dailyHours += totalActivityHours; // Это должно быть скорректировано, если вы хотите сбрасывать dailyHours каждый день
+        allLanguages.add(language);
+
+        // Сохраняем обновленные данные в локальное хранилище
+        localStorage.setItem('activityData', JSON.stringify(activityData));
+        localStorage.setItem('totalHours', totalHours.toString());
+        localStorage.setItem('dailyHours', dailyHours.toString());
+        localStorage.setItem('allLanguages', JSON.stringify(Array.from(allLanguages)));
+
+        // Обновляем график и счетчики
+        updateChart();
+        updateTotalCounter();
+        updateDailyCounter();
+        updateLanguageTime();
     } else {
-        alert("Ты ебанулся?");
+        alert("Пожалуйста, введите корректное количество часов.");
     }
 }
+
 
 // Функция для обновления времени для каждого языка программирования
 function updateLanguageTime() {
@@ -70,22 +78,60 @@ function updateLanguageTime() {
     languageTimeElement.innerHTML = ''; // Очищаем содержимое элемента
 
     for (const language of allLanguages) {
-        const languageHours = activityData[Object.keys(activityData)[0]][language] || 0; // Получаем время для первой даты
+        const languageData = activityData[Object.keys(activityData)[0]][language]; // Получаем данные о времени для первой даты
+        const hours = Math.floor(languageData);
+        const minutes = Math.floor((languageData - hours) * 60);
         const languageParagraph = document.createElement('p');
-        languageParagraph.textContent = `Time spent on ${language}: ${languageHours} hours`;
+        languageParagraph.textContent = `Time spent on ${language}: ${hours} часов ${minutes} минут`;
         languageTimeElement.appendChild(languageParagraph);
     }
 }
 
-// Функция для обновления общего количества часов
+// Функция для обновления общего количества часов с учетом минут
 function updateTotalCounter() {
-    document.getElementById('totalHours').innerText = totalHours;
+    const totalHoursElement = document.getElementById('totalHours');
+    const formattedTotalHours = formatTimeWithMinutes(totalHours);
+    totalHoursElement.innerText = formattedTotalHours;
 }
 
-// Функция для обновления количества часов за текущий день
+// Функция для обновления количества часов за текущий день с учетом минут
 function updateDailyCounter() {
-    document.getElementById('dailyHours').innerText = dailyHours;
+    const dailyHoursElement = document.getElementById('dailyHours');
+    const formattedDailyHours = formatTimeWithMinutes(dailyHours);
+    dailyHoursElement.innerText = formattedDailyHours;
 }
+
+// Функция для обновления времени для каждого языка программирования с учетом минут
+function updateLanguageTime() {
+    const languageTimeElement = document.getElementById('languageTime');
+    languageTimeElement.innerHTML = ''; // Очищаем содержимое элемента
+
+    allLanguages.forEach(language => {
+        let totalLanguageTime = 0; // Объявляем переменную здесь, чтобы она была доступна внутри цикла
+
+        Object.keys(activityData).forEach(date => {
+            if (activityData[date][language]) { // Проверяем, существуют ли данные для данного языка в эту дату
+                totalLanguageTime += activityData[date][language]; // Суммируем время по всем датам
+            }
+        });
+
+        const formattedTime = formatTimeWithMinutes(totalLanguageTime); // Форматируем общее время
+        const languageParagraph = document.createElement('p');
+        languageParagraph.textContent = `Time spent on ${language}: ${formattedTime}`;
+        languageTimeElement.appendChild(languageParagraph);
+        
+    });
+}
+
+
+
+// Функция для форматирования времени с учетом минут
+function formatTimeWithMinutes(time) {
+    const hours = Math.floor(time);
+    const minutes = Math.round((time - hours) * 60); // Используем Math.round для правильного округления минут
+    return `${hours} часов ${minutes} минут`;
+}
+
 
 // Функция для обновления графика
 function updateChart() {

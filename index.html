@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding Activity Tracker</title>
-    <link href="styles.css" rel="stylesheet" />
-    <link rel="icon" href="favicon.ico" />
+    <link href="./styles.css" rel="stylesheet" >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" >
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./src/script.js" defer></script>
     <script src="./src/visual.js" defer></script>
@@ -15,6 +18,7 @@
 <body class="page">
     <h1 class="main__title">Coding Activity Tracker</h1>
     <div class="main__inputs-buttons">
+        <button onclick="toggleTimer()">Start/Stop Timer</button>
         <button class="button" onclick="toggleTheme()">Theme</button>
         <div>
             <label for="language">Language:</label>
@@ -22,13 +26,16 @@
         </div>
         <div>
             <label for="hours">Hours:</label>
-            <input type="number" id="hours" min="0" value="0">
+            <input type="number" id="hours" placeholder="Hours" min="0">
+            <label for="minutes">Minutes:</label>
+            <input type="number" id="minutes" placeholder="Minutes" min="0" max="59">
         </div>
         <button class="button" onclick="addActivity()">Add Activity</button>
     </div>
     <div class="activity__chart">
         <canvas id="activityChart" width="400" height="300"></canvas>
     </div>
+    <div id="timer">00:00:00</div>
     <section class="main__hours-count">
         <div class="main__total-hours">
             <h2>Total Hours</h2>
@@ -39,9 +46,9 @@
             <p id="dailyHours">0</p>
         </div>
     </section>
-        <div id="languageTime">
-            <!-- Здесь будут отображаться время для каждого языка программирования -->
-        </div>
+    <div id="languageTime">
+        <!-- Здесь будут отображаться время для каждого языка программирования -->
+    </div>
 
     <button class="button" id="resetButton" onclick="resetProgress()">Reset</button>
 </body>
