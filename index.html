@@ -1,56 +1,88 @@
 <!DOCTYPE html>
 <html lang="en" class="light-theme">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Coding Activity Tracker</title>
-    <link href="./styles.css" rel="stylesheet" >
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.ico" >
+    <link href="./styles.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/nes.css/css/nes.min.css">
+    <link rel="icon" href="favicon.ico" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./src/script.js" defer></script>
     <script src="./src/visual.js" defer></script>
-</head>
+  </head>
 
-<body class="page">
+  <body class="page">
     <h1 class="main__title">Coding Activity Tracker</h1>
+    <button class="button theme__button" onclick="toggleTheme()">Theme</button>
+    <header class="header">
     <div class="main__inputs-buttons">
-        <button onclick="toggleTimer()">Start/Stop Timer</button>
-        <button class="button" onclick="toggleTheme()">Theme</button>
-        <div>
-            <label for="language">Language:</label>
-            <input type="text" id="language">
-        </div>
-        <div>
-            <label for="hours">Hours:</label>
-            <input type="number" id="hours" placeholder="Hours" min="0">
-            <label for="minutes">Minutes:</label>
-            <input type="number" id="minutes" placeholder="Minutes" min="0" max="59">
-        </div>
-        <button class="button" onclick="addActivity()">Add Activity</button>
+      <button class="button" id="toggleTimer" onclick="toggleTimer()">
+        Start Learning
+      </button>
+      <div>
+        <label for="language">Language:</label>
+        <select class="input" id="language">
+          <option value="JavaScript">JavaScript</option>
+          <option value="Python">Python</option>
+          <option value="Java">Java</option>
+          <option value="HTML">HTML</option>
+          <option value="CSS">CSS</option>
+          <option value="TypeScript">TypeScript</option>
+          <option value="C#">C#</option>
+          <option value="C++">C++</option>
+          <option value="C">C</option>
+          <!-- Добавьте другие языки по мере необходимости -->
+        </select>
+      </div>
+      <div class="main__inputs">
+        <label for="hours">Hours:</label>
+        <input class="input" type="number" id="hours" placeholder="Hours" min="0" />
+        <label for="minutes">Minutes:</label>
+        <input
+          type="number"
+          id="minutes"
+          placeholder="Minutes"
+          min="0"
+          max="59"
+          class="input"
+        />
+      </div>
+      <button class="button" onclick="addActivity()">Add Activity</button>
     </div>
-    <div class="activity__chart">
-        <canvas id="activityChart" width="400" height="300"></canvas>
+    </header>
+
+    <div id="activityChartContainer">
+      <canvas id="activityChart" width="400" height="300"></canvas>
     </div>
     <div id="timer">00:00:00</div>
-    <section class="main__hours-count">
-        <div class="main__total-hours">
-            <h2>Total Hours</h2>
-            <p id="totalHours">0</p>
-        </div>
-        <div class="main__daily-hours">
-            <h2>Daily Hours</h2>
-            <p id="dailyHours">0</p>
-        </div>
-    </section>
-    <div id="languageTime">
+    <div id="progressBarsContainer"></div>
+    <!-- Кнопка для показа/скрытия статистики -->
+    <button class="button" id="toggleStatsBtn">
+      Просмотреть свою статистику
+    </button>
+    <!-- Контейнер для статистики -->
+    <section id="statsSection" class="main__hours-count" style="display: none">
+      <div class="main__total-hours">
+        <h2>Total Hours</h2>
+        <p id="totalHours">0</p>
+      </div>
+      <div class="main__daily-hours">
+        <h2>Daily Hours</h2>
+        <p id="dailyHours">0</p>
+      </div>
+      <div id="languageTime">
         <!-- Здесь будут отображаться время для каждого языка программирования -->
-    </div>
-
-    <button class="button" id="resetButton" onclick="resetProgress()">Reset</button>
-</body>
-
+      </div>
+    </section>
+    <button class="button" id="resetButton" onclick="resetProgress()">
+      Reset
+    </button>
+  </body>
 </html>

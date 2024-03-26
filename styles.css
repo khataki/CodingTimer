@@ -8,7 +8,8 @@
     --text-color: #333;
     --navbar-background: #fff;
     --card-background: #fff;
-    --background-grid-color: #11c9d5
+    --background-grid-color: #11c9d5;
+    --border-color: #000;
 }
 
 /* Переменные для темной темы */
@@ -18,12 +19,19 @@
     --navbar-background: #222;
     --card-background: #444;
     --background-grad-color: #b400b8;
+    --border-color: #fff;
 }
 
 :root {
     --retro-font: "Press Start 2P", system-ui;
     font-weight: 400;
     font-style: normal;
+}
+
+.theme__button {
+    position: absolute;
+    right: 30px;
+    top: 30px;
 }
 
 /* Общие стили для всех тем */
@@ -34,18 +42,30 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 50px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+
 }
 
 .main__inputs-buttons {
     display: flex;
     gap: 20px;
     margin-bottom: 50px;
+    flex-direction: column;
 }
 
 .button {
     background-color: transparent;
-    border: 1px solid var(--border-color);
+    border: none;
     color: var(--text-color);
+}
+
+.button:hover {
+    scale: 1.2;
 }
 
 .container {
@@ -92,4 +112,38 @@
 
 .main__title {
     font-family: var(--retro-font);
+}
+
+.language-progress {
+    margin-bottom: 20px;
+}
+
+.language-progress h4 {
+    margin: 0 0 10px 0;
+}
+
+progress {
+    width: 100%;
+    height: 20px;
+}
+
+#toggleStatsBtn {
+    margin-bottom: 20px;
+}
+
+#timer {
+    margin-bottom: 20px;
+}
+
+.main__inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    width: 100%;
+    margin-bottom: 10px;
 }

@@ -9,6 +9,19 @@ let dailyHours = parseFloat(localStorage.getItem('dailyHours')) || 0; // Исп�
 // Переменная для хранения объекта Chart
 let chart;
 
+let timerRunning = false;
+let startTime;
+let timerInterval;
+
+const levels = [
+    { name: "Никто", hoursRequired: 0 }, // Начальный уровень
+    { name: "Стажер", hoursRequired: 50 },
+    { name: "Джун", hoursRequired: 150 }, // 50 + 100
+    { name: "Миддл", hoursRequired: 350 }, // 150 + 200
+    { name: "Сеньор", hoursRequired: 850 } // 350 + 500
+];
+
+document.getElementById('toggleStatsBtn').addEventListener('click', toggleStats);
 // Проверяем, есть ли сохраненные данные в локальном хранилище и загружаем их
 if (localStorage.getItem('activityData')) {
     activityData = JSON.parse(localStorage.getItem('activityData'));
@@ -28,16 +41,21 @@ updateTotalCounter();
 updateDailyCounter();
 updateLanguageTime();
 
-// Функция для добавления активности
-// Функция для добавления активности
-function addActivity() {
-    let language = document.getElementById('language').value;
-    // Получаем значения часов и минут из полей ввода
-    let hoursInput = parseFloat(document.getElementById('hours').value) || 0; // Предполагаем, что это поле для часов
-    let minutesInput = parseFloat(document.getElementById('minutes').value) || 0; // Предполагаем, что это поле для минут
 
-    // Преобразуем минуты в десятичную долю часа и исправляем переменную на totalActivityHours для избежания путаницы
+// Функция для добавления активности
+function addActivity(hours = null, minutes = null) {
+    let language = document.getElementById('language').value;
+    let hoursInput = hours !== null ? hours : parseFloat(document.getElementById('hours').value);
+    let minutesInput = minutes !== null ? minutes : parseFloat(document.getElementById('minutes').value);
+
+    // Преобразуем минуты в часы для универсальности
     let totalActivityHours = hoursInput + (minutesInput / 60);
+
+    // Проверка на корректность ввода
+    if (isNaN(totalActivityHours) || totalActivityHours <= 0) {
+        alert("Пожалуйста, введите корректное количество часов.");
+        return; // Выход из функции, если ввод некорректен
+    }
 
     let today = new Date().toLocaleDateString();
 
@@ -66,9 +84,12 @@ function addActivity() {
         updateTotalCounter();
         updateDailyCounter();
         updateLanguageTime();
+        updateProgressBars()
     } else {
         alert("Пожалуйста, введите корректное количество часов.");
     }
+    document.getElementById('hours').value = '';
+    document.getElementById('minutes').value = '';
 }
 
 
@@ -138,6 +159,13 @@ function updateChart() {
     const dates = Object.keys(activityData);
     const languages = Array.from(allLanguages); // Преобразуем множество всех языков в массив
     const ctx = document.getElementById('activityChart').getContext('2d');
+    const chartContainer = document.getElementById('activityChartContainer'); // Убедитесь, что у контейнера графика есть id="activityChartContainer"
+    
+    if (Object.keys(activityData).length === 0) {
+            chartContainer.style.display = 'none';
+        } else {
+            chartContainer.style.display = 'block';
+    
 
     // Уничтожаем существующий график, если он есть
     if (chart) {
@@ -170,7 +198,7 @@ function updateChart() {
         }
     });
 }
-
+}
 // Функция для сброса прогресса
 function resetProgress() {
     // Очищаем данные в JavaScript переменных
@@ -178,15 +206,135 @@ function resetProgress() {
     allLanguages.clear();
     totalHours = 0;
     dailyHours = 0;
-    // Обновляем отображение данных на странице
-    updateChart();
-    updateTotalCounter();
-    updateDailyCounter();
-    updateLanguageTime();
 
     // Очищаем данные в localStorage
     localStorage.removeItem('activityData');
     localStorage.removeItem('allLanguages');
     localStorage.removeItem('totalHours');
     localStorage.removeItem('dailyHours');
+
+    // Обновляем отображение данных на странице
+    updateChart();
+    updateTotalCounter();
+    updateDailyCounter();
+    updateLanguageTime();
+
+    // Добавляем вызов updateProgressBars для обновления шкал прогресса
+    updateProgressBars();
+}
+
+function pad(number) {
+    return number.toString().padStart(2, '0');
+}
+
+
+function toggleTimer() {
+    if (!timerRunning) {
+        // Запуск таймера
+        startTime = Date.now();
+        document.getElementById('toggleTimer').innerText = 'Stop Learning';
+        timerInterval = setInterval(() => {
+            const elapsedTime = Date.now() - startTime;
+            const seconds = Math.floor((elapsedTime / 1000) % 60);
+            const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
+            const hours = Math.floor(elapsedTime / (1000 * 60 * 60));
+            
+            document.getElementById('timer').innerText = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }, 1000);
+        timerRunning = true;
+    } else {
+        // Остановка таймера
+        clearInterval(timerInterval);
+        document.getElementById('toggleTimer').innerText = 'Start Learning';
+        
+        let elapsedSeconds = (Date.now() - startTime) / 1000;
+        let hours = Math.floor(elapsedSeconds / 3600);
+        let minutes = Math.floor((elapsedSeconds % 3600) / 60);
+        
+        // Обновляем поля ввода перед вызовом addActivity
+        // Это нужно, если где-то еще используются значения из полей ввода
+        document.getElementById('hours').value = hours;
+        document.getElementById('minutes').value = minutes;
+        
+        // Теперь вызываем addActivity с явно переданными параметрами
+        addActivity(hours, minutes);
+        
+        
+        document.getElementById('timer').innerText = '00:00:00';
+        timerRunning = false;
+    }
+}
+
+
+function getCurrentLevel(hours) {
+    let currentLevel = levels[0].name; // Начальный уровень
+    for (let level of levels) {
+        if (hours >= level.hoursRequired) {
+            currentLevel = level.name;
+        } else {
+            break; // После достижения текущего уровня выходим из цикла
+        }
+    }
+    return currentLevel;
+}
+
+
+
+function updateProgressBars() {
+    const progressBarsContainer = document.getElementById('progressBarsContainer');
+    progressBarsContainer.innerHTML = ''; // Очищаем текущее содержимое контейнера
+
+    // Если нет языков программирования, выходим из функции
+    if (allLanguages.size === 0) {
+        return;
+    }
+
+    allLanguages.forEach(language => {
+        let totalLanguageTime = 0; // Общее время на язык
+        Object.keys(activityData).forEach(date => {
+            if (activityData[date][language]) {
+                totalLanguageTime += activityData[date][language];
+            }
+        });
+
+        const currentLevel = getCurrentLevel(totalLanguageTime);
+        const nextLevel = getNextLevelInfo(totalLanguageTime); // Функция для получения информации о следующем уровне
+        
+        // Создаем элементы для отображения шкалы прогресса
+        const languageDiv = document.createElement('div');
+        languageDiv.className = 'language-progress';
+
+        const title = document.createElement('h4');
+        title.textContent = `${language} - ${currentLevel}`;
+        languageDiv.appendChild(title);
+
+        const progressBar = document.createElement('progress');
+        progressBar.max = nextLevel.hoursRequired;
+        progressBar.value = totalLanguageTime;
+        progressBar.textContent = `${totalLanguageTime} / ${nextLevel.hoursRequired} часов до ${nextLevel.name}`;
+        languageDiv.appendChild(progressBar);
+
+        progressBarsContainer.appendChild(languageDiv);
+    });
+}
+
+// Дополнительная функция для получения информации о следующем уровне
+function getNextLevelInfo(hours) {
+    for (let i = 0; i < levels.length - 1; i++) {
+        if (hours < levels[i + 1].hoursRequired) {
+            return levels[i + 1];
+        }
+    }
+    return { name: "Максимальный уровень", hoursRequired: hours }; // Возвращаем текущий уровень, если максимальный
+}
+
+function toggleStats() {
+    const statsSection = document.getElementById('statsSection');
+    if (statsSection.style.display === "none") {
+        statsSection.style.display = "block";
+        document.getElementById('toggleStatsBtn').textContent = 'Скрыть свою статистику';
+    } else {
+        statsSection.style.display = "none";
+        document.getElementById('toggleStatsBtn').textContent = 'Просмотреть свою статистику';
+    }
 }
