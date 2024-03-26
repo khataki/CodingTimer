@@ -40,32 +40,36 @@
           <option value="C">C</option>
           <!-- Добавьте другие языки по мере необходимости -->
         </select>
+      </div> 
       </div>
-      <div class="main__inputs">
-        <label for="hours">Hours:</label>
-        <input class="input" type="number" id="hours" placeholder="Hours" min="0" />
-        <label for="minutes">Minutes:</label>
-        <input
-          type="number"
-          id="minutes"
-          placeholder="Minutes"
-          min="0"
-          max="59"
-          class="input"
-        />
-      </div>
-      <button class="button" onclick="addActivity()">Add Activity</button>
-    </div>
     </header>
 
     <div id="activityChartContainer">
       <canvas id="activityChart" width="400" height="300"></canvas>
     </div>
     <div id="timer">00:00:00</div>
+    <button class="button" id="toggleManualInputBtn">Add manually</button>
+    <div id="manualInputContainer" style="display:none;">
+        <div class="main__inputs">
+            <label for="hours">Hours:</label>
+            <input class="input" type="number" id="hours" placeholder="Hours" min="0" />
+            <label for="minutes">Minutes:</label>
+            <input
+              type="number"
+              id="minutes"
+              placeholder="Minutes"
+              min="0"
+              max="59"
+              class="input"
+            />
+            <button class="button" onclick="addActivity()">Add Activity</button>
+        </div>
+        </div>
+    </div>
     <div id="progressBarsContainer"></div>
     <!-- Кнопка для показа/скрытия статистики -->
     <button class="button" id="toggleStatsBtn">
-      Просмотреть свою статистику
+      Check stats
     </button>
     <!-- Контейнер для статистики -->
     <section id="statsSection" class="main__hours-count" style="display: none">

@@ -22,6 +22,8 @@ const levels = [
 ];
 
 document.getElementById('toggleStatsBtn').addEventListener('click', toggleStats);
+document.getElementById('toggleManualInputBtn').addEventListener('click', toggleManualInput);
+
 // Проверяем, есть ли сохраненные данные в локальном хранилище и загружаем их
 if (localStorage.getItem('activityData')) {
     activityData = JSON.parse(localStorage.getItem('activityData'));
@@ -332,9 +334,18 @@ function toggleStats() {
     const statsSection = document.getElementById('statsSection');
     if (statsSection.style.display === "none") {
         statsSection.style.display = "block";
-        document.getElementById('toggleStatsBtn').textContent = 'Скрыть свою статистику';
+        document.getElementById('toggleStatsBtn').textContent = 'Hide stats';
     } else {
         statsSection.style.display = "none";
-        document.getElementById('toggleStatsBtn').textContent = 'Просмотреть свою статистику';
+        document.getElementById('toggleStatsBtn').textContent = 'Check stats';
+    }
+}
+
+function toggleManualInput() {
+    const manualInputContainer = document.getElementById('manualInputContainer');
+    if (manualInputContainer.style.display === "none") {
+        manualInputContainer.style.display = "block";
+    } else {
+        manualInputContainer.style.display = "none";
     }
 }
