@@ -43,10 +43,6 @@
       </div> 
       </div>
     </header>
-
-    <div id="activityChartContainer">
-      <canvas id="activityChart" width="400" height="300"></canvas>
-    </div>
     <div id="timer">00:00:00</div>
     <button class="button" id="toggleManualInputBtn">Add manually</button>
     <div id="manualInputContainer" style="display:none;">
@@ -85,6 +81,10 @@
         <!-- Здесь будут отображаться время для каждого языка программирования -->
       </div>
     </section>
+    <button class="button" id="exportButton" onclick="">View on charts</button>
+    <div id="activityChartContainer">
+        <canvas id="activityChart" width="400" height="300"></canvas>
+      </div>
     <button class="button" id="resetButton" onclick="resetProgress()">
       Reset
     </button>

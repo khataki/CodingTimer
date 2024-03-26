@@ -161,7 +161,8 @@ function updateChart() {
     const dates = Object.keys(activityData);
     const languages = Array.from(allLanguages); // Преобразуем множество всех языков в массив
     const ctx = document.getElementById('activityChart').getContext('2d');
-    const chartContainer = document.getElementById('activityChartContainer'); // Убедитесь, что у контейнера графика есть id="activityChartContainer"
+    const chartContainer = document.getElementById('activityChartContainer');
+     // Убедитесь, что у контейнера графика есть id="activityChartContainer"
     
     if (Object.keys(activityData).length === 0) {
             chartContainer.style.display = 'none';
