@@ -153,7 +153,7 @@ function updateLanguageTime() {
 function formatTimeWithMinutes(time) {
     const hours = Math.floor(time);
     const minutes = Math.round((time - hours) * 60); // Используем Math.round для правильного округления минут
-    return `${hours} часов ${minutes} минут`;
+    return `${hours} hours ${minutes} minutes`;
 }
 
 
@@ -246,6 +246,8 @@ function toggleTimer() {
             document.getElementById('timer').innerText = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
         }, 1000);
         timerRunning = true;
+
+
     } else {
         // Остановка таймера
         clearInterval(timerInterval);
@@ -254,6 +256,13 @@ function toggleTimer() {
         let elapsedSeconds = (Date.now() - startTime) / 1000;
         let hours = Math.floor(elapsedSeconds / 3600);
         let minutes = Math.floor((elapsedSeconds % 3600) / 60);
+
+        if (elapsedSeconds < 60) {
+            // Если прошло меньше минуты, просто сбрасываем таймер и не добавляем активность
+            document.getElementById('timer').innerText = '00:00:00';
+            timerRunning = false;
+            return; // Прекращаем выполнение функции
+        }
         
         // Обновляем поля ввода перед вызовом addActivity
         // Это нужно, если где-то еще используются значения из полей ввода
@@ -395,4 +404,3 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProgressBars(); // Обновляем шкалы прогресса после полной загрузки DOM
 });
 
-//коммент для коммита и починки страницы

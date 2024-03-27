@@ -1,225 +1,238 @@
 * {
-    box-sizing: border-box;
-
+  box-sizing: border-box;
 }
 *:focus {
-    outline: none;
-    border: none;
+  outline: none;
+  border: none;
 }
-/* коммент для коммита и починки страницы */
 
 /* Переменные для светлой темы */
 :root.light-theme {
-    --background-color: #f0f0f0;
-    --text-color: #333;
-    --navbar-background: #fff;
-    --card-background: #fff;
-    --background-grid-color: #11c9d5;
-    --border-color: #000;
-    --hover-color: green;
+  --background-color: #f0f0f0;
+  --text-color: #333;
+  --navbar-background: #fff;
+  --card-background: #fff;
+  --background-grid-color: #11c9d5;
+  --border-color: #000;
+  --hover-color: green;
 }
 
 /* Переменные для темной темы */
 :root.dark-theme {
-    --background-color: #333;
-    --text-color: #f0f0f0;
-    --navbar-background: #222;
-    --card-background: #444;
-    --background-grad-color: #b400b8;
-    --border-color: #fff;
-    --hover-color: blue;
+  --background-color: #333;
+  --text-color: #f0f0f0;
+  --navbar-background: #222;
+  --card-background: #444;
+  --background-grad-color: #b400b8;
+  --border-color: #fff;
+  --hover-color: blue;
 }
 
 :root {
-    --retro-font: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
+  --retro-font: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .theme__button {
-    position: absolute;
-    right: 30px;
-    top: 30px;
+  position: absolute;
+  right: 30px;
+  top: 30px;
 }
 
 /* Общие стили для всех тем */
 .page {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-    padding: 50px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  padding: 50px;
 }
 
 .header {
-    display: flex;
-    flex-direction: column;
-
+  display: flex;
+  flex-direction: column;
 }
 
 .main__inputs-buttons {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 50px;
-    flex-direction: column;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 50px;
+  flex-direction: column;
 }
 
 .button {
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
 }
 
 .button:hover {
-    scale: 1.2;
+  scale: 1.2;
+}
+
+.button:active {
+  border: 4px solid var(--border-color);
+}
+
+.button:focus {
+  outline: none;
+  border: none;
+}
+.button:focus-visible {
+  outline: none;
+  border: 4px solid var(--border-color);
+  scale: 1.2;
 }
 
 .container {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 /* Стили для контейнера графика */
 .chart-container {
-    width: 50%;
-    margin: 0 auto;
+  width: 50%;
+  margin: 0 auto;
 }
 
 /* Стили для общих лейблов и текста */
 .chart-label {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
 /* Стили для графика */
 #activityChart {
-    margin: auto;
-    /* Задайте высоту графика по своему усмотрению */
+  margin: auto;
+  /* Задайте высоту графика по своему усмотрению */
 }
 
 .activity__chart {
-    /* display: none; */
-    width: 300px;
-    height: 300px;
-    margin-bottom: 50px;
+  /* display: none; */
+  width: 300px;
+  height: 300px;
+  margin-bottom: 50px;
 }
 
 .main__total-hours,
 .main__daily-hours {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .main__hours-count {
-    display: flex;
-    gap: 25px;
+  display: flex;
+  gap: 25px;
 }
 
 .main__title {
-    font-family: var(--retro-font);
+  font-family: var(--retro-font);
 }
 
 .language-progress {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .language-progress h4 {
-    margin: 0 0 10px 0;
+  margin: 0 0 10px 0;
 }
 
 progress {
-    width: 100%;
-    height: 20px;
+  width: 100%;
+  height: 20px;
 }
 
 #toggleStatsBtn {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #timer {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .main__inputs {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .input {
-    background: transparent;
-    border: none;
-    color: var(--text-color);
-    width: 100%;
-    margin-bottom: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .select-lang {
-    font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .custom-select {
+  position: relative;
+  user-select: none;
+}
 
-    position: relative;
-    user-select: none;
-  }
-  
-  .custom-select__trigger {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    cursor: pointer;
-    flex-wrap: nowrap;
-    gap: 5px;
+.custom-select__trigger {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
 
-  }
-  
-  .custom-options {
- 
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    border: 1px solid var(--border-color);
-    z-index: 2;
-    background: var(--background-color);
-    color: var(--text-color);
-  }
-  
-  .custom-option {
-    cursor: pointer;
-    width: 100%;
-    &:hover {
-      background-color: var(--hover-color);
-      color: white;
-    }
-  }
-  
-  .arrow {
-    margin-left: auto;
-    /* Добавь стили для стрелки */
-  }
-  
-  .main__button {
-    border: 4px solid var(--border-color);
-    padding: 20px;
-    &:hover {
-        background-color: var(--hover-color);
-        color: white;
-    }
-  }
+.custom-select__trigger:hover {
+    background-color: var(--hover-color);
+    color: white;
+}
 
-  #activityChartContainer {
-    display: none;
+.custom-options {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid var(--border-color);
+  z-index: 2;
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+.custom-option {
+  cursor: pointer;
+  width: 100%;
+  &:hover {
+    background-color: var(--hover-color);
+    color: white;
   }
+}
+
+.arrow {
+  margin-left: auto;
+  /* Добавь стили для стрелки */
+}
+
+.main__button {
+  border: 4px solid var(--border-color);
+  padding: 20px;
+  &:hover {
+    background-color: var(--hover-color);
+    color: white;
+  }
+}
+
+#activityChartContainer {
+  display: none;
+}
