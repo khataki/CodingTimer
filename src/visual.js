@@ -4,3 +4,4 @@ function toggleTheme() {
     htmlElement.classList.toggle('light-theme');
     htmlElement.classList.toggle('dark-theme');
 }
+

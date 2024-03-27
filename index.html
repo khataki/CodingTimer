@@ -23,12 +23,12 @@
     <button class="button theme__button" onclick="toggleTheme()">Theme</button>
     <header class="header">
     <div class="main__inputs-buttons">
-      <button class="button" id="toggleTimer" onclick="toggleTimer()">
+      <button class="main__button button" id="toggleTimer" onclick="toggleTimer()">
         Start Learning
       </button>
       <div>
-        <label for="language">Language:</label>
-        <select class="input" id="language">
+        <label class="hidden" for="language">Language:</label>
+        <select class="input select-lang hidden" id="language">
           <option value="JavaScript">JavaScript</option>
           <option value="Python">Python</option>
           <option value="Java">Java</option>
@@ -40,6 +40,23 @@
           <option value="C">C</option>
           <!-- Добавьте другие языки по мере необходимости -->
         </select>
+        <div class="custom-select" id="customSelect">
+            <div class="custom-select__trigger"><span>Choose language</span>
+              <div class="arrow"></div>
+            </div>
+            <div class="custom-options" style="display: none;">
+              <span class="custom-option" data-value="JavaScript">JavaScript</span>
+              <span class="custom-option" data-value="Python">Python</span>
+              <span class="custom-option" data-value="Java">Java</span>
+              <span class="custom-option" data-value="HTML">HTML</span>
+              <span class="custom-option" data-value="CSS">CSS</span>
+              <span class="custom-option" data-value="TypeScript">TypeScript</span>
+              <span class="custom-option" data-value="C#">C#</span>
+              <span class="custom-option" data-value="C++">C++</span>
+              <span class="custom-option" data-value="C">C</span>
+              <!-- добавь другие опции -->
+            </div>
+          </div>
       </div> 
       </div>
     </header>

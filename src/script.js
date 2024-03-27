@@ -21,6 +21,7 @@ const levels = [
     { name: "Сеньор", hoursRequired: 850 } // 350 + 500
 ];
 
+document.getElementById('activityChartContainer').style.display = "none"; // Скрываем график при инициализации
 document.getElementById('toggleStatsBtn').addEventListener('click', toggleStats);
 document.getElementById('toggleManualInputBtn').addEventListener('click', toggleManualInput);
 
@@ -47,15 +48,15 @@ updateLanguageTime();
 // Функция для добавления активности
 function addActivity(hours = null, minutes = null) {
     let language = document.getElementById('language').value;
-    let hoursInput = hours !== null ? hours : parseFloat(document.getElementById('hours').value);
-    let minutesInput = minutes !== null ? minutes : parseFloat(document.getElementById('minutes').value);
+    let hoursInput = hours !== null ? hours : parseFloat(document.getElementById('hours').value || 0);
+    // Устанавливаем значение по умолчанию для minutesInput в 0, если поле пустое или значение не указано
+    let minutesInput = minutes !== null ? minutes : parseFloat(document.getElementById('minutes').value || 0);
 
     // Преобразуем минуты в часы для универсальности
     let totalActivityHours = hoursInput + (minutesInput / 60);
-
     // Проверка на корректность ввода
     if (isNaN(totalActivityHours) || totalActivityHours <= 0) {
-        alert("Пожалуйста, введите корректное количество часов.");
+        alert("Please, enter correct value");
         return; // Выход из функции, если ввод некорректен
     }
 
@@ -88,7 +89,7 @@ function addActivity(hours = null, minutes = null) {
         updateLanguageTime();
         updateProgressBars()
     } else {
-        alert("Пожалуйста, введите корректное количество часов.");
+        alert("Please, enter correct value.");
     }
     document.getElementById('hours').value = '';
     document.getElementById('minutes').value = '';
@@ -105,7 +106,7 @@ function updateLanguageTime() {
         const hours = Math.floor(languageData);
         const minutes = Math.floor((languageData - hours) * 60);
         const languageParagraph = document.createElement('p');
-        languageParagraph.textContent = `Time spent on ${language}: ${hours} часов ${minutes} минут`;
+        languageParagraph.textContent = `Time spent on ${language}: ${hours} hours ${minutes} minutes`;
         languageTimeElement.appendChild(languageParagraph);
     }
 }
@@ -350,3 +351,46 @@ function toggleManualInput() {
         manualInputContainer.style.display = "none";
     }
 }
+
+document.querySelector('.custom-select__trigger').addEventListener('click', function() {
+    this.parentNode.querySelector('.custom-options').style.display = 'flex';
+  });
+  
+  // Добавь обработчики для выбора опции
+  document.querySelectorAll('.custom-option').forEach(option => {
+    option.addEventListener('click', function() {
+        // Получаем значение data-value выбранной опции
+        let value = this.getAttribute('data-value');
+
+        // Находим основной <select> и обновляем его значение
+        const selectElement = document.getElementById('language');
+        selectElement.value = value; // Устанавливаем значение <select> в соответствии с выбором
+
+        // Здесь можешь добавить дополнительные действия, например, закрыть кастомный список после выбора
+        this.closest('.custom-select').querySelector('.custom-options').style.display = 'none';
+        this.closest('.custom-select').querySelector('.custom-select__trigger span').textContent = this.textContent;
+    });
+});
+  
+  // Закрываем выпадающий список при клике вне его
+  window.addEventListener('click', function(e) {
+    const select = document.querySelector('.custom-select');
+    if (!select.contains(e.target)) {
+      select.querySelector('.custom-options').style.display = 'none';
+    }
+  });
+  
+  document.getElementById('exportButton').addEventListener('click', toggleChartVisibility);
+
+  function toggleChartVisibility() {
+    const chartContainer = document.getElementById('activityChartContainer');
+    if (chartContainer.style.display === "block" || chartContainer.style.display === "") {
+        chartContainer.style.display = "none"; // Показываем график, если он был скрыт
+    } else {
+        chartContainer.style.display = "block"; // Скрываем график, если он был виден
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateProgressBars(); // Обновляем шкалы прогресса после полной загрузки DOM
+});
