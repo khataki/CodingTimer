@@ -5,3 +5,4 @@ function toggleTheme() {
     htmlElement.classList.toggle('dark-theme');
 }
 
+//коммент для коммита и починки страницы

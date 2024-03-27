@@ -394,3 +394,5 @@ document.querySelector('.custom-select__trigger').addEventListener('click', func
 document.addEventListener('DOMContentLoaded', function() {
     updateProgressBars(); // Обновляем шкалы прогресса после полной загрузки DOM
 });
+
+//коммент для коммита и починки страницы
