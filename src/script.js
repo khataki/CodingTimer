@@ -14,11 +14,11 @@ let startTime;
 let timerInterval;
 
 const levels = [
-    { name: "Никто", hoursRequired: 0 }, // Начальный уровень
-    { name: "Стажер", hoursRequired: 50 },
-    { name: "Джун", hoursRequired: 150 }, // 50 + 100
-    { name: "Миддл", hoursRequired: 350 }, // 150 + 200
-    { name: "Сеньор", hoursRequired: 850 } // 350 + 500
+    { name: "Nobody", hoursRequired: 0 }, // Начальный уровень
+    { name: "Rookie", hoursRequired: 150 },
+    { name: "Junior", hoursRequired: 1000 }, // 50 + 100
+    { name: "Middle", hoursRequired: 5000 }, // 150 + 200
+    { name: "Senior", hoursRequired: 10000 } // 350 + 500
 ];
 
 document.getElementById('activityChartContainer').style.display = "none"; // Скрываем график при инициализации
